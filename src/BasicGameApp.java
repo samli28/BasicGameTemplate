@@ -41,7 +41,7 @@ public class BasicGameApp implements Runnable {
     Image bobImg1;
 
     boolean firstCrash;
-    Bob [] bobShower = new Bob[7];
+    Bob [] bobShower = new Bob[5];
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -78,13 +78,6 @@ public class BasicGameApp implements Runnable {
         //for the moment we will loop things forever.
         while (true) {
             moveThings();  //move all the game objects
-            if (bart1.isAlive == false) {
-                bart1.width = bart1.width + 10;
-                bart1.height = bart1.height + 10;
-            }
-            if(bart1.width > 1000){
-
-            }
             render();  // paint the graphics
             pause(30); // sleep for 10 ms
         }
@@ -99,7 +92,6 @@ public class BasicGameApp implements Runnable {
     }
 
     public void checkCrash(){
-
         for (int x = 0; x < bobShower.length; x++){
 
             if (bart1.rect.intersects(bobShower[x].rect)){
@@ -110,7 +102,12 @@ public class BasicGameApp implements Runnable {
                 bobShower[x].dx = -bobShower[x].dx;
                 bobShower[x].dy = -bobShower[x].dy;
 
-                bart1.health -= 5;
+                bart1.health -= 50;
+                bart1.isAlive = false;
+            }
+            else if (!bart1.rect.intersects(bobShower[x].rect)&& !firstCrash){
+                bart1.dx=0;
+                bart1.dy=0;
             }
         }
     }
@@ -125,10 +122,11 @@ public class BasicGameApp implements Runnable {
         //draw the image
         g.drawImage(bartImg1, bart1.xpos, bart1.ypos, bart1.width, bart1.height, null);
 
-        bufferStrategy.show();
+
         for(int x =0; x<bobShower.length; x++){
             g.drawImage(bobImg1,bobShower[x].xpos,bobShower[x].ypos,bobShower[x].width,bobShower[x].height,null);
         }
+        bufferStrategy.show();
         g.dispose();
     }
 
