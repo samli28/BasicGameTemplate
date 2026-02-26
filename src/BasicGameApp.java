@@ -11,6 +11,8 @@
 import sun.print.BackgroundLookupListener;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
@@ -18,7 +20,7 @@ import javax.swing.JPanel;
 
 //*******************************************************************************
 
-public class BasicGameApp implements Runnable {
+public class BasicGameApp implements Runnable, KeyListener {
 
     //Variable Definition Section
     //Declare the variables used in the program
@@ -36,12 +38,16 @@ public class BasicGameApp implements Runnable {
     public BufferStrategy bufferStrategy;
 
 
-    Bart bart1;
-    Image bartImg1;
-    Image bobImg1;
+    Bart bart;
+    Image bartImg;
+    Image bobImg;
+    Image backgroundImg;
 
     boolean firstCrash;
-    Bob [] bobShower = new Bob[5];
+    boolean level1;
+    boolean level2;
+    boolean level3;
+    Bob [] bobShower = new Bob[3];
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -57,9 +63,10 @@ public class BasicGameApp implements Runnable {
 
         setUpGraphics();
         firstCrash = true;
-        bart1 = new Bart("bart1.jpg", 300, 300);
-        bartImg1 = Toolkit.getDefaultToolkit().getImage("bart.jpg");
-        bobImg1 = Toolkit.getDefaultToolkit().getImage("bob.png");
+        bart = new Bart("bart.jpg", 300, 300);
+        bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
+        bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
+        backgroundImg = Toolkit.getDefaultToolkit().getImage("background1.jpg");
         for (int x = 0; x < bobShower.length; x++){
             bobShower[x]=new Bob ("bob"+x,((int)(Math.random()*WIDTH)),((int)(Math.random()*HEIGHT)));
         }
@@ -84,7 +91,7 @@ public class BasicGameApp implements Runnable {
     }
 
     public void moveThings() {
-        bart1.move();
+        bart.move();
         for (int x = 0; x < bobShower.length; x++){
             bobShower[x].move();
         }
@@ -94,19 +101,19 @@ public class BasicGameApp implements Runnable {
     public void checkCrash(){
         for (int x = 0; x < bobShower.length; x++){
 
-            if (bart1.rect.intersects(bobShower[x].rect)){
+            if (bart.rect.intersects(bobShower[x].rect)){
 
-                bart1.dx = -bart1.dx;
-                bart1.dy = -bart1.dy;
+                bart.dx = -bart.dx;
+                bart.dy = -bart.dy;
 
                 bobShower[x].dx = -bobShower[x].dx;
                 bobShower[x].dy = -bobShower[x].dy;
 
-                bart1.health -= 10;
-                bart1.isAlive = false;
+                bart.health -= 5;
+                bart.isAlive = false;
             }
-            else if (bart1.health<=0&&!bart1.isAlive){
-                bartImg1 = null;
+            else if (bart.health<=0&&!bart.isAlive){
+                bartImg = null;
             }
         }
     }
@@ -115,15 +122,16 @@ public class BasicGameApp implements Runnable {
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0,0,WIDTH,HEIGHT);
+        g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
 
-        g.setColor(new Color(120,150,200));
-        g.fillRect(850, 30, bart1.health, 15);
+        g.setColor(new Color(120,0,0));
+        g.fillRect(850, 30, bart.health, 15);
         //draw the image
-        g.drawImage(bartImg1, bart1.xpos, bart1.ypos, bart1.width, bart1.height, null);
+        g.drawImage(bartImg, bart.xpos, bart.ypos, bart.width, bart.height, null);
 
 
         for(int x =0; x<bobShower.length; x++){
-            g.drawImage(bobImg1,bobShower[x].xpos,bobShower[x].ypos,bobShower[x].width,bobShower[x].height,null);
+            g.drawImage(bobImg,bobShower[x].xpos,bobShower[x].ypos,bobShower[x].width,bobShower[x].height,null);
         }
         bufferStrategy.show();
         g.dispose();
@@ -166,4 +174,20 @@ public class BasicGameApp implements Runnable {
         System.out.println("DONE graphic setup");
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+        if (e.getKeyCode() == 38) {
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 }
