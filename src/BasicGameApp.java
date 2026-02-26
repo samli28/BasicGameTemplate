@@ -102,12 +102,11 @@ public class BasicGameApp implements Runnable {
                 bobShower[x].dx = -bobShower[x].dx;
                 bobShower[x].dy = -bobShower[x].dy;
 
-                bart1.health -= 50;
+                bart1.health -= 10;
                 bart1.isAlive = false;
             }
-            else if (!bart1.rect.intersects(bobShower[x].rect)&& !firstCrash){
-                bart1.dx=0;
-                bart1.dy=0;
+            else if (bart1.health<=0&&!bart1.isAlive){
+                bartImg1 = null;
             }
         }
     }
