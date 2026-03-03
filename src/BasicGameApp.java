@@ -47,7 +47,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean level1;
     boolean level2;
     boolean level3;
-    Bob [] bobShower = new Bob[1];
+    Bob [] bobNumber = new Bob[5];
     boolean pressingKey;
     boolean background1;
     boolean background2;
@@ -66,21 +66,12 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         setUpGraphics();
         firstCrash = true;
-        if(level1){
-            Bob [] bobShower = new Bob[1];
-        }
-        if(level2){
-            Bob [] bobShower = new Bob[3];
-        }
-        if(level3){
-            Bob [] bobShower = new Bob[5];
-        }
         bart = new Bart("bart.jpg", 300, 300);
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
-        backgroundImg = Toolkit.getDefaultToolkit().getImage("background1.jpg");
-        for (int x = 0; x < bobShower.length; x++){
-            bobShower[x]=new Bob ("bob"+x,((int)(Math.random()*WIDTH)),((int)(Math.random()*HEIGHT)));
+        backgroundImg = Toolkit.getDefaultToolkit().getImage("background.jpg");
+        for (int x = 0; x < bobNumber.length; x++){
+            bobNumber[x]=new Bob ("bob"+x,((int)(Math.random()*WIDTH)),((int)(Math.random()*HEIGHT)));
         }
 
 
@@ -104,24 +95,24 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public void moveThings() {
         bart.move();
-        for (int x = 0; x < bobShower.length; x++){
-            bobShower[x].move();
+        for (int x = 0; x < bobNumber.length; x++){
+            bobNumber[x].move();
         }
         checkCrash();
     }
 
     public void checkCrash(){
-        for (int x = 0; x < bobShower.length; x++){
+        for (int x = 0; x < bobNumber.length; x++){
 
-            if (bart.rect.intersects(bobShower[x].rect)){
+            if (bart.rect.intersects(bobNumber[x].rect)){
 
                 bart.dx = -bart.dx;
                 bart.dy = -bart.dy;
 
-                bobShower[x].dx = -bobShower[x].dx;
-                bobShower[x].dy = -bobShower[x].dy;
+                bobNumber[x].dx = -bobNumber[x].dx;
+                bobNumber[x].dy = -bobNumber[x].dy;
 
-                bart.health -= 5;
+                bart.health -= 10;
                 bart.isAlive = false;
             }
             else if (bart.health<=0&&!bart.isAlive){
@@ -134,18 +125,23 @@ public class BasicGameApp implements Runnable, KeyListener {
     private void render() {
         Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
         g.clearRect(0,0,WIDTH,HEIGHT);
+
         g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
 
-        g.setColor(new Color(120,0,0));
+        g.setFont(new Font("Arial",Font.BOLD,20));
+        g.setColor(new Color(0, 0, 0));
+        g.drawString("For LEVEL 1, click 1 on your keyboard",20,50);
+
+        g.setColor(new Color(214, 0, 0));
         g.fillRect(850, 30, bart.health, 15);
         //draw the image
         g.drawImage(bartImg, bart.xpos, bart.ypos, bart.width, bart.height, null);
 
-
-        for(int x =0; x<bobShower.length; x++){
-            g.drawImage(bobImg,bobShower[x].xpos,bobShower[x].ypos,bobShower[x].width,bobShower[x].height,null);
+        for(int x =0; x<bobNumber.length; x++){
+            g.drawImage(bobImg,bobNumber[x].xpos,bobNumber[x].ypos,bobNumber[x].width,bobNumber[x].height,null);
         }
         bufferStrategy.show();
+
         g.dispose();
     }
 
@@ -183,6 +179,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
         canvas.requestFocus();
+        canvas.addKeyListener(this);
         System.out.println("DONE graphic setup");
     }
 
@@ -195,29 +192,42 @@ public class BasicGameApp implements Runnable, KeyListener {
     public void keyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
         pressingKey = true;
-        if (e.getKeyCode() == 37) {//right arrow
-            bart.dx=-10;
-            bart.dy=0;
+        if (e.getKeyCode() == 68) {//right arrow
+            bart.dx=10;
         }
-        if (e.getKeyCode() == 38) {//up arrow
-            bart.dx=0;
+        if (e.getKeyCode() == 87) {//up arrow
             bart.dy=-10;
         }
-        if (e.getKeyCode() == 39) {//left arrow
-            bart.dx=10;
-            bart.dy=0;
+        if (e.getKeyCode() == 65) {//left arrow
+            bart.dx=-10;
         }
-        if (e.getKeyCode() == 40) { //down arrow
-            bart.dx=0;
+        if (e.getKeyCode() == 83) { //down arrow
             bart.dy=10;
+        }
+
+        if (e.getKeyCode() == 49) { // level 1
+            System.out.println("LEVEL 1");
+        }
+        if (level1) { // level 1
+            Bob [] bobNumber = new Bob[1];
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println(e.getKeyCode());
-        pressingKey = true;
-        bart.dx=0;
-        bart.dy=0;
+        if (e.getKeyCode() == 68) { //right arrow
+            bart.dy = 0;
+        }
+        if (e.getKeyCode() == 65) { //left arrow
+            bart.dy = 0;
+        }
+        if (e.getKeyCode() == 83) { //down arrow
+            bart.dx = 0;
+        }
+        if (e.getKeyCode() == 87) {//up arrow
+            bart.dx = 0;
+        }
+        bart.dx = 0;
+        bart.dy = 0;
     }
 }

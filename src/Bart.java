@@ -25,8 +25,8 @@ public class Bart {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
-        dx = 15;
-        dy = 15;
+        dx = 0;
+        dy = 0;
         width = 100;
         height = 100;
         isAlive = true;
