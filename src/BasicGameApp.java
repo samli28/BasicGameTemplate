@@ -47,7 +47,10 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean level1;
     boolean level2;
     boolean level3;
-    Bob [] bobShower = new Bob[3];
+    Bob [] bobShower = new Bob[1];
+    boolean pressingKey;
+    boolean background1;
+    boolean background2;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -63,6 +66,15 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         setUpGraphics();
         firstCrash = true;
+        if(level1){
+            Bob [] bobShower = new Bob[1];
+        }
+        if(level2){
+            Bob [] bobShower = new Bob[3];
+        }
+        if(level3){
+            Bob [] bobShower = new Bob[5];
+        }
         bart = new Bart("bart.jpg", 300, 300);
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
@@ -182,12 +194,30 @@ public class BasicGameApp implements Runnable, KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
-        if (e.getKeyCode() == 38) {
+        pressingKey = true;
+        if (e.getKeyCode() == 37) {//right arrow
+            bart.dx=-10;
+            bart.dy=0;
+        }
+        if (e.getKeyCode() == 38) {//up arrow
+            bart.dx=0;
+            bart.dy=-10;
+        }
+        if (e.getKeyCode() == 39) {//left arrow
+            bart.dx=10;
+            bart.dy=0;
+        }
+        if (e.getKeyCode() == 40) { //down arrow
+            bart.dx=0;
+            bart.dy=10;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
+        System.out.println(e.getKeyCode());
+        pressingKey = true;
+        bart.dx=0;
+        bart.dy=0;
     }
 }
