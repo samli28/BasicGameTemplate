@@ -117,7 +117,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         }
 
         for (int x = 0; x < bobNumber; x++){
-            bobs.add(new Bob("bob" + x,(int)(Math.random()*WIDTH),(int)(Math.random()*HEIGHT)));
+            bobs.add(new Bob("bob" + x,50,50));
         }
     }
 
@@ -134,6 +134,7 @@ public class BasicGameApp implements Runnable, KeyListener {
                 BOB.dy = -BOB.dy;
 
                 bart.health -= 5;
+                bart.isAlive=false;
             }
             if (bart.health<=0&&!bart.isAlive){
                 bartImg = null;
@@ -156,6 +157,11 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.setColor(new Color(255, 0, 0));
         g.drawString("CLICK 3 FOR HARD MODE",20,100);
 
+        if (bart.health<=0&&!bart.isAlive){
+            g.setColor(new Color(0, 0, 0));
+            g.drawString("YOU LOST!",450,400);
+        }
+
         g.setColor(new Color(136, 50, 50));
         g.fillRect(850, 30, bart.health, 15);
         //draw the image
@@ -163,8 +169,9 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         for(int x =0; x<bobs.size(); x++){
             Bob BOB = bobs.get(x);
-            g.drawImage(bobImg,BOB.xpos,BOB.ypos,(int)(Math.random()*WIDTH),(int)(Math.random()*HEIGHT),null);
+            g.drawImage(bobImg,BOB.xpos,BOB.ypos,115,115,null);
         }
+
         bufferStrategy.show();
 
         g.dispose();

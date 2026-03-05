@@ -25,8 +25,8 @@ public class Bob {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
-        dx = (int)(Math.random()*11)-5;
-        dy = (int)(Math.random()*11)-5;
+        dx = (int)(Math.random()*11)+1;
+        dy = (int)(Math.random()*11)+1;
         width = 115;
         height = 115;
         isAlive = true;
