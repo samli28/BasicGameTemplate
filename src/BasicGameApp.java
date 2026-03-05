@@ -17,6 +17,9 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.util.ArrayList;
+
+import static java.nio.file.Files.move;
 
 //*******************************************************************************
 
@@ -47,7 +50,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean level1;
     boolean level2;
     boolean level3;
-    Bob [] bobNumber = new Bob[5];
+    ArrayList<Bob> bobs = new ArrayList<>();
     boolean pressingKey;
     boolean background1;
     boolean background2;
@@ -69,10 +72,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         bart = new Bart("bart.jpg", 300, 300);
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
-        backgroundImg = Toolkit.getDefaultToolkit().getImage("background.jpg");
-        for (int x = 0; x < bobNumber.length; x++){
-            bobNumber[x]=new Bob ("bob"+x,((int)(Math.random()*WIDTH)),((int)(Math.random()*HEIGHT)));
-        }
+        backgroundImg = Toolkit.getDefaultToolkit().getImage("background1.jpg");
 
 
     } // end BasicGameApp constructor
@@ -95,27 +95,47 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     public void moveThings() {
         bart.move();
-        for (int x = 0; x < bobNumber.length; x++){
-            bobNumber[x].move();
+        for (int x = 0; x < bobs.size(); x++){
+            bobs.get(x).move();
         }
         checkCrash();
     }
 
-    public void checkCrash(){
-        for (int x = 0; x < bobNumber.length; x++){
+    public void loadLevel(int level){
+        bobs.clear();
 
-            if (bart.rect.intersects(bobNumber[x].rect)){
+        int bobNumber = 0;
+
+        if (level == 1){
+            bobNumber = 1;
+        }
+        else if (level == 2){
+            bobNumber = 3;
+        }
+        else if (level == 3){
+            bobNumber = 5;
+        }
+
+        for (int x = 0; x < bobNumber; x++){
+            bobs.add(new Bob("bob" + x,(int)(Math.random()*WIDTH),(int)(Math.random()*HEIGHT)));
+        }
+    }
+
+    public void checkCrash(){
+        for (int x = 0; x < bobs.size(); x++){
+            Bob BOB = bobs.get(x);
+
+            if (bart.rect.intersects(BOB.rect)){
 
                 bart.dx = -bart.dx;
                 bart.dy = -bart.dy;
 
-                bobNumber[x].dx = -bobNumber[x].dx;
-                bobNumber[x].dy = -bobNumber[x].dy;
+                BOB.dx = -BOB.dx;
+                BOB.dy = -BOB.dy;
 
-                bart.health -= 10;
-                bart.isAlive = false;
+                bart.health -= 5;
             }
-            else if (bart.health<=0&&!bart.isAlive){
+            if (bart.health<=0&&!bart.isAlive){
                 bartImg = null;
             }
         }
@@ -129,16 +149,21 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
 
         g.setFont(new Font("Arial",Font.BOLD,20));
-        g.setColor(new Color(0, 0, 0));
-        g.drawString("For LEVEL 1, click 1 on your keyboard",20,50);
+        g.setColor(new Color(255, 255, 0));
+        g.drawString("CLICK 1 FOR EASY MODE",20,50);
+        g.setColor(new Color(255, 165, 0));
+        g.drawString("CLICK 2 FOR MEDIUM MODE",20,75);
+        g.setColor(new Color(255, 0, 0));
+        g.drawString("CLICK 3 FOR HARD MODE",20,100);
 
-        g.setColor(new Color(214, 0, 0));
+        g.setColor(new Color(136, 50, 50));
         g.fillRect(850, 30, bart.health, 15);
         //draw the image
         g.drawImage(bartImg, bart.xpos, bart.ypos, bart.width, bart.height, null);
 
-        for(int x =0; x<bobNumber.length; x++){
-            g.drawImage(bobImg,bobNumber[x].xpos,bobNumber[x].ypos,bobNumber[x].width,bobNumber[x].height,null);
+        for(int x =0; x<bobs.size(); x++){
+            Bob BOB = bobs.get(x);
+            g.drawImage(bobImg,BOB.xpos,BOB.ypos,(int)(Math.random()*WIDTH),(int)(Math.random()*HEIGHT),null);
         }
         bufferStrategy.show();
 
@@ -206,10 +231,16 @@ public class BasicGameApp implements Runnable, KeyListener {
         }
 
         if (e.getKeyCode() == 49) { // level 1
-            System.out.println("LEVEL 1");
+            System.out.println("Difficulty: EASY");
+            loadLevel(1);
         }
-        if (level1) { // level 1
-            Bob [] bobNumber = new Bob[1];
+        else if (e.getKeyCode() == 50) { // level 2
+            System.out.println("Difficulty: MEDIUM");
+            loadLevel(2);
+        }
+        else if (e.getKeyCode() == 51) { // level 3
+            System.out.println("Difficulty: HARD");
+            loadLevel(3);
         }
     }
 
