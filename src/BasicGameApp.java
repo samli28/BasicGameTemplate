@@ -45,6 +45,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     Image bartImg;
     Image bobImg;
     Image backgroundImg;
+    Image endscreenImg;
 
     boolean firstCrash;
     boolean level1;
@@ -54,6 +55,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     boolean pressingKey;
     boolean background1;
     boolean background2;
+    int bartSpeed;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -73,6 +75,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
         backgroundImg = Toolkit.getDefaultToolkit().getImage("background1.jpg");
+        endscreenImg = Toolkit.getDefaultToolkit().getImage("end screen.jpg");
 
 
     } // end BasicGameApp constructor
@@ -133,7 +136,7 @@ public class BasicGameApp implements Runnable, KeyListener {
                 BOB.dx = -BOB.dx;
                 BOB.dy = -BOB.dy;
 
-                bart.health -= 5;
+                bart.health -= 10;
                 bart.isAlive=false;
             }
             if (bart.health<=0&&!bart.isAlive){
@@ -156,9 +159,14 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.drawString("CLICK 2 FOR MEDIUM MODE",20,75);
         g.setColor(new Color(255, 0, 0));
         g.drawString("CLICK 3 FOR HARD MODE",20,100);
+        g.setColor(new Color(0, 255, 234));
+        g.drawString("Controls = WASD",20,125);
+        g.setColor(new Color(49, 255, 0));
+        g.drawString("Shift for Speed Boost",20,150);
 
         if (bart.health<=0&&!bart.isAlive){
-            g.setColor(new Color(0, 0, 0));
+            g.setColor(new Color(255, 255, 255));
+            g.drawImage(endscreenImg, 0, 0, WIDTH, HEIGHT, null);
             g.drawString("YOU LOST!",450,400);
         }
 
@@ -224,19 +232,23 @@ public class BasicGameApp implements Runnable, KeyListener {
     public void keyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
         pressingKey = true;
+        if(e.getKeyCode()==KeyEvent.VK_SHIFT){
+            bartSpeed=15;
+            bart.dx = -bartSpeed;
+            bart.dy = bartSpeed;
+        }
         if (e.getKeyCode() == 68) {//right arrow
-            bart.dx=10;
+            bart.dx = 10;
         }
         if (e.getKeyCode() == 87) {//up arrow
-            bart.dy=-10;
+            bart.dy = -10;
         }
         if (e.getKeyCode() == 65) {//left arrow
-            bart.dx=-10;
+            bart.dx = -10;
         }
         if (e.getKeyCode() == 83) { //down arrow
-            bart.dy=10;
+            bart.dy = 10;
         }
-
         if (e.getKeyCode() == 49) { // level 1
             System.out.println("Difficulty: EASY");
             loadLevel(1);
@@ -253,17 +265,9 @@ public class BasicGameApp implements Runnable, KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getKeyCode() == 68) { //right arrow
-            bart.dy = 0;
-        }
-        if (e.getKeyCode() == 65) { //left arrow
-            bart.dy = 0;
-        }
-        if (e.getKeyCode() == 83) { //down arrow
-            bart.dx = 0;
-        }
-        if (e.getKeyCode() == 87) {//up arrow
-            bart.dx = 0;
+        pressingKey = true;
+        if(e.getKeyCode()==KeyEvent.VK_SHIFT){
+            bartSpeed=15;
         }
         bart.dx = 0;
         bart.dy = 0;
