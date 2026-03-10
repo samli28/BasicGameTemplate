@@ -18,8 +18,8 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.ArrayList;
-
-import static java.nio.file.Files.move;
+import java.util.Timer;
+import java.util.TimerTask;
 
 //*******************************************************************************
 
@@ -41,6 +41,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     public BufferStrategy bufferStrategy;
 
 
+
     Bart bart;
     Image bartImg;
     Image bobImg;
@@ -48,14 +49,10 @@ public class BasicGameApp implements Runnable, KeyListener {
     Image endscreenImg;
 
     boolean firstCrash;
-    boolean level1;
-    boolean level2;
-    boolean level3;
     ArrayList<Bob> bobs = new ArrayList<>();
     boolean pressingKey;
-    boolean background1;
-    boolean background2;
     int bartSpeed;
+    int seconds;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -172,6 +169,24 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         g.setColor(new Color(136, 50, 50));
         g.fillRect(850, 30, bart.health, 15);
+
+        if (bart.isAlive) {
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                int seconds = 0;
+
+                @Override
+                public void run() {
+                    seconds++;
+                }
+            };
+            timer.scheduleAtFixedRate(task, 0, 1000);
+
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(new Color(98, 0, 189));
+            System.out.println("Time: " + seconds);
+        }
+
         //draw the image
         g.drawImage(bartImg, bart.xpos, bart.ypos, bart.width, bart.height, null);
 
