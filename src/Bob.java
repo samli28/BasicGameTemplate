@@ -49,7 +49,7 @@ public class Bob {
             dy = -dy;
         }
         else if (ypos <= 0) {
-            dy = -dy;
+            dy=- dy;
         }
     }
 

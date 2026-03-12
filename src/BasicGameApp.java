@@ -115,6 +115,12 @@ public class BasicGameApp implements Runnable, KeyListener {
         else if (level == 3){
             bobNumber = 5;
         }
+        else if (level == 4){
+            bobNumber = 7;
+        }
+        else if (level == 5){
+            bobNumber = 9;
+        }
 
         for (int x = 0; x < bobNumber; x++){
             bobs.add(new Bob("bob" + x,50,50));
@@ -156,10 +162,14 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.drawString("CLICK 2 FOR MEDIUM MODE",20,75);
         g.setColor(new Color(255, 0, 0));
         g.drawString("CLICK 3 FOR HARD MODE",20,100);
-        g.setColor(new Color(0, 255, 234));
-        g.drawString("Controls = WASD",20,125);
-        g.setColor(new Color(49, 255, 0));
-        g.drawString("Shift for Speed Boost",20,150);
+        g.setColor(new Color(50, 13, 13));
+        g.drawString("CLICK 4 FOR PRO MODE",20,125);
+        g.setColor(new Color(0, 0, 0));
+        g.drawString("CLICK 5 FOR HACKER MODE",20,150);
+        g.setColor(new Color(5, 203, 255));
+        g.drawString("Controls = WASD",20,175);
+        g.setColor(new Color(0, 246, 154));
+        g.drawString("Shift for Speed Boost",20,200);
 
         if (bart.health<=0&&!bart.isAlive){
             g.setColor(new Color(255, 255, 255));
@@ -276,13 +286,21 @@ public class BasicGameApp implements Runnable, KeyListener {
             System.out.println("Difficulty: HARD");
             loadLevel(3);
         }
+        else if (e.getKeyCode() == 52) { // level 3
+            System.out.println("Difficulty: PRO");
+            loadLevel(4);
+        }
+        else if (e.getKeyCode() == 53) { // level 3
+            System.out.println("Difficulty: HACKER");
+            loadLevel(5);
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         pressingKey = true;
         if(e.getKeyCode()==KeyEvent.VK_SHIFT){
-            bartSpeed=15;
+            bartSpeed=20;
         }
         bart.dx = 0;
         bart.dy = 0;

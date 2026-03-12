@@ -40,16 +40,16 @@ public class Bart {
         rect = new Rectangle(xpos, ypos, width, height);
 
         if (xpos >= 1000 - width) {
-            dx = -dx;
+            xpos = 0;
         }
         else if (xpos <= 0) {
-            dx = -dx;
+            xpos = 1000-width;
         }
         if (ypos >= 800-height) {
-            dy = -dy;
+            ypos = 0;
         }
         else if (ypos <= 0) {
-            dy = -dy;
+            ypos = 800-height;
         }
     }
 }
