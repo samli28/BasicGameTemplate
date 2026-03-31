@@ -181,17 +181,6 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.fillRect(850, 30, bart.health, 15);
 
         if (bart.isAlive) {
-            Timer timer = new Timer();
-            TimerTask task = new TimerTask() {
-                int seconds = 0;
-
-                @Override
-                public void run() {
-                    seconds++;
-                }
-            };
-            timer.scheduleAtFixedRate(task, 0, 1000);
-
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.setColor(new Color(98, 0, 189));
             System.out.println("Time: " + seconds);
