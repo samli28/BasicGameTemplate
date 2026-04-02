@@ -50,6 +50,8 @@ public class BasicGameApp implements Runnable, KeyListener {
     ArrayList<Bob> bobs = new ArrayList<>();
     boolean pressingKey;
     int bartSpeed;
+    boolean firstPressed;
+    boolean pickLevel;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -68,7 +70,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         bart = new Bart("bart.jpg", 300, 300);
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
-        backgroundImg = Toolkit.getDefaultToolkit().getImage("background1.jpg");
+        backgroundImg = Toolkit.getDefaultToolkit().getImage("homepage.jpeg");
         endscreenImg = Toolkit.getDefaultToolkit().getImage("end screen.jpg");
 
 
@@ -160,29 +162,37 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.clearRect(0,0,WIDTH,HEIGHT);
 
         g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
+        if(!firstPressed){
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(new Color(14, 42, 104));
+            g.drawString("CLICK 'SPACE BUTTON' FOR INSTRUCTIONS", 20, 50);
+        }
 
-        g.setFont(new Font("Arial",Font.BOLD,20));
-        g.setColor(new Color(255, 255, 0));
-        g.drawString("CLICK 1 FOR EASY MODE",20,50);
-        g.setColor(new Color(255, 165, 0));
-        g.drawString("CLICK 2 FOR MEDIUM MODE",20,75);
-        g.setColor(new Color(255, 0, 0));
-        g.drawString("CLICK 3 FOR HARD MODE",20,100);
-        g.setColor(new Color(50, 13, 13));
-        g.drawString("CLICK 4 FOR PRO MODE",20,125);
-        g.setColor(new Color(0, 0, 0));
-        g.drawString("CLICK 5 FOR HACKER MODE",20,150);
-        g.setColor(new Color(5, 203, 255));
-        g.drawString("Controls = WASD",20,175);
-        g.setColor(new Color(0, 246, 154));
-        g.drawString("Shift for Speed Boost",20,200);
-        g.setColor(new Color(0, 0, 0));
-        g.drawString("Click Q for Background 1",350,50);
-        g.setColor(new Color(0, 0, 0));
-        g.drawString("Click E for Background 2",350,75);
 
-        if(bart.xpos<bart.ypos){
-            g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
+        if(firstPressed&&!pickLevel) {
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(new Color(255, 255, 0));
+            g.drawString("CLICK 1 FOR EASY MODE", 20, 50);
+            g.setColor(new Color(255, 165, 0));
+            g.drawString("CLICK 2 FOR MEDIUM MODE", 20, 75);
+            g.setColor(new Color(255, 0, 0));
+            g.drawString("CLICK 3 FOR HARD MODE", 20, 100);
+            g.setColor(new Color(50, 13, 13));
+            g.drawString("CLICK 4 FOR PRO MODE", 20, 125);
+            g.setColor(new Color(0, 0, 0));
+            g.drawString("CLICK 5 FOR HACKER MODE", 20, 150);
+            g.setColor(new Color(5, 203, 255));
+            g.drawString("Controls = WASD", 20, 175);
+            g.setColor(new Color(0, 246, 154));
+            g.drawString("Shift for Speed Boost", 20, 200);
+            g.setColor(new Color(0, 0, 0));
+            g.drawString("Click Q for Background 1", 350, 50);
+            g.setColor(new Color(0, 0, 0));
+            g.drawString("Click E for Background 2", 350, 75);
+        }
+
+        if(pickLevel){
+            backgroundImg = Toolkit.getDefaultToolkit().getImage("homepage.jpeg");
         }
 
         if (bart.health<=0&&!bart.isAlive){
@@ -254,50 +264,68 @@ public class BasicGameApp implements Runnable, KeyListener {
     public void keyPressed(KeyEvent e) {
         System.out.println(e.getKeyCode());
         pressingKey = true;
-        if(e.getKeyCode()==KeyEvent.VK_SHIFT){
+        firstPressed = true;
+        pickLevel = false;
+
+        if(e.getKeyCode()==KeyEvent.VK_SHIFT){//shift button
             bartSpeed=15;
             bart.dx = -bartSpeed;
             bart.dy = bartSpeed;
+            pickLevel=true;
         }
         if (e.getKeyCode() == 68) {//right arrow
             bart.dx = 10;
+            pickLevel=true;
         }
         if (e.getKeyCode() == 87) {//up arrow
             bart.dy = -10;
+            pickLevel=true;
         }
         if (e.getKeyCode() == 65) {//left arrow
             bart.dx = -10;
+            pickLevel=true;
         }
         if (e.getKeyCode() == 83) { //down arrow
             bart.dy = 10;
+            pickLevel=true;
         }
         if (e.getKeyCode() == 49) { // level 1
             System.out.println("Difficulty: EASY");
             loadLevel(1);
+            pickLevel=true;
         }
         else if (e.getKeyCode() == 50) { // level 2
             System.out.println("Difficulty: MEDIUM");
             loadLevel(2);
+            pickLevel=true;
         }
         else if (e.getKeyCode() == 51) { // level 3
             System.out.println("Difficulty: HARD");
             loadLevel(3);
+            pickLevel=true;
         }
         else if (e.getKeyCode() == 52) { // level 4
             System.out.println("Difficulty: PRO");
             loadLevel(4);
+            pickLevel=true;
         }
         else if (e.getKeyCode() == 53) { // level 5
             System.out.println("Difficulty: HACKER");
             loadLevel(5);
+            pickLevel=true;
         }
         else if (e.getKeyCode() == 81) { // q button
             System.out.println("Background 1");
             loadBackground(1);
+            pickLevel=true;
         }
         else if (e.getKeyCode() == 69) { // e button
             System.out.println("Background 2");
             loadBackground(2);
+            pickLevel=true;
+        }
+        else if (e.getKeyCode() == 32) { // space button
+            System.out.println("Welcome to the instructions menu!");
         }
     }
 
