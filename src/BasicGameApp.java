@@ -18,8 +18,6 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 //*******************************************************************************
 
@@ -52,7 +50,6 @@ public class BasicGameApp implements Runnable, KeyListener {
     ArrayList<Bob> bobs = new ArrayList<>();
     boolean pressingKey;
     int bartSpeed;
-    int seconds;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -99,6 +96,15 @@ public class BasicGameApp implements Runnable, KeyListener {
             bobs.get(x).move();
         }
         checkCrash();
+    }
+
+    public void loadBackground(int Background){
+        if(Background == 1){
+            backgroundImg = Toolkit.getDefaultToolkit().getImage("background1.jpg");
+        }
+        else if(Background == 2){
+            backgroundImg = Toolkit.getDefaultToolkit().getImage("background2.jpg");
+        }
     }
 
     public void loadLevel(int level){
@@ -170,6 +176,14 @@ public class BasicGameApp implements Runnable, KeyListener {
         g.drawString("Controls = WASD",20,175);
         g.setColor(new Color(0, 246, 154));
         g.drawString("Shift for Speed Boost",20,200);
+        g.setColor(new Color(0, 0, 0));
+        g.drawString("Click Q for Background 1",350,50);
+        g.setColor(new Color(0, 0, 0));
+        g.drawString("Click E for Background 2",350,75);
+
+        if(bart.xpos<bart.ypos){
+            g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
+        }
 
         if (bart.health<=0&&!bart.isAlive){
             g.setColor(new Color(255, 255, 255));
@@ -179,12 +193,6 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         g.setColor(new Color(136, 50, 50));
         g.fillRect(850, 30, bart.health, 15);
-
-        if (bart.isAlive) {
-            g.setFont(new Font("Arial", Font.BOLD, 20));
-            g.setColor(new Color(98, 0, 189));
-            System.out.println("Time: " + seconds);
-        }
 
         //draw the image
         g.drawImage(bartImg, bart.xpos, bart.ypos, bart.width, bart.height, null);
@@ -275,13 +283,21 @@ public class BasicGameApp implements Runnable, KeyListener {
             System.out.println("Difficulty: HARD");
             loadLevel(3);
         }
-        else if (e.getKeyCode() == 52) { // level 3
+        else if (e.getKeyCode() == 52) { // level 4
             System.out.println("Difficulty: PRO");
             loadLevel(4);
         }
-        else if (e.getKeyCode() == 53) { // level 3
+        else if (e.getKeyCode() == 53) { // level 5
             System.out.println("Difficulty: HACKER");
             loadLevel(5);
+        }
+        else if (e.getKeyCode() == 81) { // q button
+            System.out.println("Background 1");
+            loadBackground(1);
+        }
+        else if (e.getKeyCode() == 69) { // e button
+            System.out.println("Background 2");
+            loadBackground(2);
         }
     }
 
