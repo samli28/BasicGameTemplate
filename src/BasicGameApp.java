@@ -152,6 +152,10 @@ public class BasicGameApp implements Runnable, KeyListener {
             }
             if (bart.health<=0&&!bart.isAlive){
                 bartImg = null;
+                for (int i = 0; i < bobs.size(); i++) {
+                    BOB.dx = 0;
+                    BOB.dy = 0;
+                }
             }
         }
     }
@@ -198,7 +202,8 @@ public class BasicGameApp implements Runnable, KeyListener {
         if (bart.health<=0&&!bart.isAlive){
             g.setColor(new Color(255, 255, 255));
             g.drawImage(endscreenImg, 0, 0, WIDTH, HEIGHT, null);
-            g.drawString("YOU LOST!",450,400);
+            g.setFont(new Font("Arial", Font.BOLD, 40));
+            g.drawString("YOU LOST!",400,400);
         }
 
         g.setColor(new Color(136, 50, 50));
