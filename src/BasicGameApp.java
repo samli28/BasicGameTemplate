@@ -13,6 +13,8 @@ import sun.print.BackgroundLookupListener;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 
 //*******************************************************************************
 
-public class BasicGameApp implements Runnable, KeyListener {
+public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     //Variable Definition Section
     //Declare the variables used in the program
@@ -44,7 +46,7 @@ public class BasicGameApp implements Runnable, KeyListener {
     Image bartImg;
     Image bobImg;
     Image backgroundImg;
-    Image endscreenImg;
+    Image endScreenImg;
 
     boolean firstCrash;
     ArrayList<Bob> bobs = new ArrayList<>();
@@ -71,7 +73,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
         backgroundImg = Toolkit.getDefaultToolkit().getImage("homepage.jpeg");
-        endscreenImg = Toolkit.getDefaultToolkit().getImage("end screen.jpg");
+        endScreenImg = Toolkit.getDefaultToolkit().getImage("end screen.jpg");
 
 
     } // end BasicGameApp constructor
@@ -167,13 +169,21 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
         if(!firstPressed){
-            g.setFont(new Font("Arial", Font.BOLD, 20));
             g.setColor(new Color(14, 42, 104));
-            g.drawString("CLICK 'SPACE BUTTON' FOR INSTRUCTIONS", 20, 50);
+            g.fillRect(0,750 , 500, 60);
+            g.setColor(new Color(0, 246, 154));
+            g.drawString("CLICK HERE TO SEE INSTRUCTIONS MENU", 37,782);
         }
 
 
         if(firstPressed&&!pickLevel) {
+            g.setColor(new Color(14, 42, 104));
+            g.fillRect(0,750 , 500, 60);
+            g.setColor(new Color(0, 246, 154));
+            g.drawString("CLICK HERE TO SEE INSTRUCTIONS MENU", 37,782);
+            g.setFont(new Font("Arial", Font.BOLD, 20));
+            g.setColor(new Color(255, 0, 0));
+            g.drawString("CLICK 'SPACE BUTTON' TO CLEAR INSTRUCTIONS", 20, 740);
             g.setFont(new Font("Arial", Font.BOLD, 20));
             g.setColor(new Color(255, 255, 0));
             g.drawString("CLICK 1 FOR EASY MODE", 20, 50);
@@ -201,7 +211,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 
         if (bart.health<=0&&!bart.isAlive){
             g.setColor(new Color(255, 255, 255));
-            g.drawImage(endscreenImg, 0, 0, WIDTH, HEIGHT, null);
+            g.drawImage(endScreenImg, 0, 0, WIDTH, HEIGHT, null);
             g.setFont(new Font("Arial", Font.BOLD, 40));
             g.drawString("YOU LOST!",400,400);
         }
@@ -257,6 +267,7 @@ public class BasicGameApp implements Runnable, KeyListener {
         bufferStrategy = canvas.getBufferStrategy();
         canvas.requestFocus();
         canvas.addKeyListener(this);
+        canvas.addMouseListener(this);
         System.out.println("DONE graphic setup");
     }
 
@@ -270,67 +281,67 @@ public class BasicGameApp implements Runnable, KeyListener {
         System.out.println(e.getKeyCode());
         pressingKey = true;
         firstPressed = true;
-        pickLevel = false;
+        pickLevel = true;
 
         if(e.getKeyCode()==KeyEvent.VK_SHIFT){//shift button
             bartSpeed=15;
             bart.dx = -bartSpeed;
             bart.dy = bartSpeed;
-            pickLevel=true;
+            pickLevel=false;
         }
         if (e.getKeyCode() == 68) {//right arrow
             bart.dx = 10;
-            pickLevel=true;
+            pickLevel=false;
         }
         if (e.getKeyCode() == 87) {//up arrow
             bart.dy = -10;
-            pickLevel=true;
+            pickLevel=false;
         }
         if (e.getKeyCode() == 65) {//left arrow
             bart.dx = -10;
-            pickLevel=true;
+            pickLevel=false;
         }
         if (e.getKeyCode() == 83) { //down arrow
             bart.dy = 10;
-            pickLevel=true;
+            pickLevel=false;
         }
         if (e.getKeyCode() == 49) { // level 1
             System.out.println("Difficulty: EASY");
             loadLevel(1);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 50) { // level 2
             System.out.println("Difficulty: MEDIUM");
             loadLevel(2);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 51) { // level 3
             System.out.println("Difficulty: HARD");
             loadLevel(3);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 52) { // level 4
             System.out.println("Difficulty: PRO");
             loadLevel(4);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 53) { // level 5
             System.out.println("Difficulty: HACKER");
             loadLevel(5);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 81) { // q button
             System.out.println("Background 1");
             loadBackground(1);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 69) { // e button
             System.out.println("Background 2");
             loadBackground(2);
-            pickLevel=true;
+            pickLevel=false;
         }
         else if (e.getKeyCode() == 32) { // space button
-            System.out.println("Welcome to the instructions menu!");
+            System.out.println("Instructions Menu Cleared, Time to Play!");
         }
     }
 
@@ -342,5 +353,34 @@ public class BasicGameApp implements Runnable, KeyListener {
         }
         bart.dx = 0;
         bart.dy = 0;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getY() >= 750 && e.getX() <= 500){
+            firstPressed = true;
+            pickLevel = false;
+
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
