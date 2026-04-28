@@ -54,6 +54,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     int bartSpeed;
     boolean firstPressed;
     boolean pickLevel;
+    boolean showInstructions = false;
+    int score;
+    boolean startGame = false;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -69,7 +72,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
         setUpGraphics();
         firstCrash = true;
-        bart = new Bart("bart.jpg", 300, 300);
+        bart = new Bart("bart.jpg", 585, 250);
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
         bobImg = Toolkit.getDefaultToolkit().getImage("bob.png");
         backgroundImg = Toolkit.getDefaultToolkit().getImage("homepage.jpeg");
@@ -100,6 +103,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             bobs.get(x).move();
         }
         checkCrash();
+        if(bart.isAlive&&startGame){
+            score++;
+        }
     }
 
     public void loadBackground(int Background){
@@ -113,6 +119,9 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
 
     public void loadLevel(int level){
         bobs.clear();
+        score = 0;
+        startGame = true;
+        showInstructions = false;
 
         int bobNumber = 0;
 
@@ -150,7 +159,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
                 BOB.dy = -BOB.dy;
 
                 bart.health -= 10;
-                bart.isAlive=false;
+                if(bart.health <= 0){
+                    bart.isAlive=false;
+                }
+
             }
             if (bart.health<=0&&!bart.isAlive){
                 bartImg = null;
@@ -168,15 +180,20 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         g.clearRect(0,0,WIDTH,HEIGHT);
 
         g.drawImage(backgroundImg, 0, 0, WIDTH, HEIGHT, null);
-        if(!firstPressed){
+        if(!startGame){
+            g.setFont(new Font("Arial", Font.BOLD, 60));
+            g.setColor(new Color(255, 255, 255));
+            g.drawString("Bart vs Bob(s)", 305, 150);
+        }
+
+            g.setFont(new Font("Arial", Font.BOLD, 20));
             g.setColor(new Color(14, 42, 104));
             g.fillRect(0,750 , 500, 60);
             g.setColor(new Color(0, 246, 154));
             g.drawString("CLICK HERE TO SEE INSTRUCTIONS MENU", 37,782);
-        }
 
 
-        if(firstPressed&&!pickLevel) {
+        if(showInstructions) {
             g.setColor(new Color(14, 42, 104));
             g.fillRect(0,750 , 500, 60);
             g.setColor(new Color(0, 246, 154));
@@ -205,10 +222,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             g.drawString("Click E for Background 2", 350, 75);
         }
 
-        if(pickLevel){
-            backgroundImg = Toolkit.getDefaultToolkit().getImage("homepage.jpeg");
-        }
-
         if (bart.health<=0&&!bart.isAlive){
             g.setColor(new Color(255, 255, 255));
             g.drawImage(endScreenImg, 0, 0, WIDTH, HEIGHT, null);
@@ -226,6 +239,10 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
             Bob BOB = bobs.get(x);
             g.drawImage(bobImg,BOB.xpos,BOB.ypos,115,115,null);
         }
+
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.setColor(new Color(255, 255, 255));
+        g.drawString("Score: " + score/33,848,23);
 
         bufferStrategy.show();
 
@@ -281,7 +298,6 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         System.out.println(e.getKeyCode());
         pressingKey = true;
         firstPressed = true;
-        pickLevel = true;
 
         if(e.getKeyCode()==KeyEvent.VK_SHIFT){//shift button
             bartSpeed=15;
@@ -342,6 +358,8 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         }
         else if (e.getKeyCode() == 32) { // space button
             System.out.println("Instructions Menu Cleared, Time to Play!");
+            pickLevel = true;
+            showInstructions = false;
         }
     }
 
@@ -360,7 +378,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
         if(e.getY() >= 750 && e.getX() <= 500){
             firstPressed = true;
             pickLevel = false;
-
+            showInstructions = true;
         }
     }
 
