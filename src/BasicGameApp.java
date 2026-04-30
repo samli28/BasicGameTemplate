@@ -20,7 +20,11 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.ArrayList;
-
+import java.awt.Toolkit;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.io.File;
 //*******************************************************************************
 
 public class BasicGameApp implements Runnable, KeyListener, MouseListener {
@@ -57,6 +61,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     boolean showInstructions = false;
     int score;
     boolean startGame = false;
+    Clip domer;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -71,6 +76,7 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
     public BasicGameApp() { // BasicGameApp constructor
 
         setUpGraphics();
+        domer();
         firstCrash = true;
         bart = new Bart("bart.jpg", 585, 250);
         bartImg = Toolkit.getDefaultToolkit().getImage("bart.jpg");
@@ -158,8 +164,14 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
                 BOB.dx = -BOB.dx;
                 BOB.dy = -BOB.dy;
 
+                if(domer != null){
+                    domer.setFramePosition(0);
+                    domer.start();
+                }
+
                 bart.health -= 10;
                 if(bart.health <= 0){
+                    Toolkit.getDefaultToolkit().beep();
                     bart.isAlive=false;
                 }
 
@@ -171,6 +183,16 @@ public class BasicGameApp implements Runnable, KeyListener, MouseListener {
                     BOB.dy = 0;
                 }
             }
+        }
+    }
+
+    public void domer(){
+        try{
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File ("domer.wav"));
+            domer = AudioSystem.getClip();
+            domer.open(audioInputStream);
+        } catch (Exception e){
+            System.out.println("Couldn't load domer sound effect" + e.getMessage());
         }
     }
 
